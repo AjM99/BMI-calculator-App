@@ -1,8 +1,14 @@
-// this is  where we take user input then we switch to next screen to show result
+// this is  where we take user input then we switch to next screen to show result,screen1
+import 'package:bmi_calculator/Constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'Constants.dart';
 
-const activeColor = Color(0xff0A0E21);
+// all constants are moved ro Constant.dart file
+enum Genders {
+  male,
+  female,
+}
 
 class InputPage extends StatefulWidget {
   @override
@@ -10,30 +16,9 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
-  Color maleCardColor = Colors.blueGrey[800];
-  Color femaleCardColor = Colors.blueGrey[800];
-
-  //1=male , 2=female
-  void updateGenderColor(int gender) {
-    // male pressed
-    if (gender == 1) {
-      if (maleCardColor == Colors.blueGrey[800]) {
-        maleCardColor = activeColor;
-        femaleCardColor = Colors.blueGrey[800];
-      } else {
-        maleCardColor = Colors.blueGrey[800];
-      }
-    }
-    // female pressed
-    if (gender == 2) {
-      if (femaleCardColor == Colors.blueGrey[800]) {
-        femaleCardColor = activeColor;
-        maleCardColor = Colors.blueGrey[800];
-      } else {
-        femaleCardColor = Colors.blueGrey[800];
-      }
-    }
-  }
+  //this is for ternary operator,these are properties
+  Genders genderColor;
+  int height = 180;
 
   @override
   Widget build(BuildContext context) {
@@ -42,20 +27,23 @@ class _InputPageState extends State<InputPage> {
         title: Text('BMI Calculator'),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween, //left to right
+        crossAxisAlignment: CrossAxisAlignment.stretch, //top to bottom
         children: <Widget>[
+          //male and Female cards
           Expanded(
-            //male and Female cards
             child: Row(children: <Widget>[
               Expanded(
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      updateGenderColor(1);
+                      genderColor = Genders.male;
                     });
                   },
                   child: card(
-                    colour: maleCardColor,
+                    colour: genderColor == Genders.male
+                        ? kActiveColor
+                        : Colors.blueGrey[800],
                     cardInput: Column(
                       //to bring everything inside card at center
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -69,10 +57,8 @@ class _InputPageState extends State<InputPage> {
                         ),
                         Text(
                           "Male",
-                          style: TextStyle(
-                            fontSize: 25,
-                            color: Color(0xff969AAD),
-                          ),
+                          //labelStyle is in Constant
+                          style: kLabelStyle,
                         )
                       ],
                     ),
@@ -83,11 +69,13 @@ class _InputPageState extends State<InputPage> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      updateGenderColor(2);
+                      genderColor = Genders.female;
                     });
                   },
                   child: card(
-                    colour: femaleCardColor,
+                    colour: genderColor == Genders.female
+                        ? kActiveColor
+                        : Colors.blueGrey[800],
                     cardInput: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -100,10 +88,8 @@ class _InputPageState extends State<InputPage> {
                         ),
                         Text(
                           "Female",
-                          style: TextStyle(
-                            fontSize: 25,
-                            color: Color(0xff969AAD),
-                          ),
+                          //labelStyle is in Constant
+                          style: kLabelStyle,
                         )
                       ],
                     ),
@@ -112,9 +98,49 @@ class _InputPageState extends State<InputPage> {
               ),
             ]),
           ),
+          //height and scroll bar
           Expanded(
             child: card(
-              colour: activeColor,
+              colour: kActiveColor,
+              cardInput: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Height",
+                    style: kLabelStyle,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    //this is to make cm and number come of one line/base
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: <Widget>[
+                      Text(
+                        //we make this os that the value changes when we slide
+                        height.toString(),
+                        style: kLabelStyle2,
+                      ),
+                      Text(
+                        "cm",
+                        style: kLabelStyle,
+                      )
+                    ],
+                  ),
+                  Slider(
+                    value: height.toDouble(),
+                    min: 120.0,
+                    max: 220.0,
+                    activeColor: Colors.blue,
+                    inactiveColor: Colors.blueGrey[800],
+                    onChanged: (double newValue) {
+                      setState(() {
+                        print(newValue);
+                        height = newValue.round();
+                      });
+                    },
+                  )
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -131,6 +157,7 @@ class _InputPageState extends State<InputPage> {
               ),
             ]),
           ),
+          //button
           Container(
             height: 60,
             margin: EdgeInsets.only(left: 15, right: 15, bottom: 15, top: 10),
