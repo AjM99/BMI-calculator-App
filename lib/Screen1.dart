@@ -1,8 +1,11 @@
 // this is  where we take user input then we switch to next screen to show result,screen1
 import 'package:bmi_calculator/Constants.dart';
+import 'package:bmi_calculator/result.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'Constants.dart';
+import 'result.dart';
 
 // all constants are moved ro Constant.dart file
 enum Genders {
@@ -19,6 +22,8 @@ class _InputPageState extends State<InputPage> {
   //this is for ternary operator,these are properties
   Genders genderColor;
   int height = 180;
+  int weight = 70;
+  int age = 18;
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +57,7 @@ class _InputPageState extends State<InputPage> {
                           FontAwesomeIcons.mars,
                           size: 90,
                         ),
-                        SizedBox(
-                          height: 15.0,
-                        ),
+                        SizedBox(height: 15.0),
                         Text(
                           "Male",
                           //labelStyle is in Constant
@@ -126,44 +129,140 @@ class _InputPageState extends State<InputPage> {
                       )
                     ],
                   ),
-                  Slider(
-                    value: height.toDouble(),
-                    min: 120.0,
-                    max: 220.0,
-                    activeColor: Colors.blue,
-                    inactiveColor: Colors.blueGrey[800],
-                    onChanged: (double newValue) {
-                      setState(() {
-                        print(newValue);
-                        height = newValue.round();
-                      });
-                    },
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      thumbColor: Color(0xff64FFDA),
+                      overlayColor: Color(0x2964FFDA),
+                      activeTrackColor: Colors.blueGrey[300],
+                      inactiveTrackColor: Colors.blueGrey[800],
+                      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 15),
+                      overlayShape: RoundSliderOverlayShape(overlayRadius: 30),
+                    ),
+                    child: Slider(
+                      value: height.toDouble(),
+                      min: 120.0,
+                      max: 220.0,
+                      onChanged: (double newValue) {
+                        setState(() {
+                          print(newValue);
+                          height = newValue.round();
+                        });
+                      },
+                    ),
                   )
                 ],
               ),
             ),
           ),
+          //weight and Age
           Expanded(
             child: Row(children: <Widget>[
               Expanded(
                 child: card(
-                  colour: Color(0xff0A0E21),
+                  colour: kActiveColor,
+                  cardInput: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Weight",
+                        style: kLabelStyle,
+                      ),
+                      Text(
+                        weight.toString(),
+                        style: kLabelStyle2,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          MyRoundButton(
+                            icon: FontAwesomeIcons.minus,
+                            press: () {
+                              setState(() {
+                                weight--;
+                              });
+                            },
+                          ),
+                          SizedBox(width: 15),
+                          MyRoundButton(
+                            icon: FontAwesomeIcons.plus,
+                            press: () {
+                              setState(() {
+                                weight++;
+                              });
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
               Expanded(
                 child: card(
-                  colour: Color(0xff0A0E21),
+                  colour: kActiveColor,
+                  cardInput: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Age",
+                        style: kLabelStyle,
+                      ),
+                      Text(
+                        age.toString(),
+                        style: kLabelStyle2,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          MyRoundButton(
+                            icon: FontAwesomeIcons.minus,
+                            press: () {
+                              setState(() {
+                                age--;
+                              });
+                            },
+                          ),
+                          SizedBox(width: 15),
+                          MyRoundButton(
+                            icon: FontAwesomeIcons.plus,
+                            press: () {
+                              setState(() {
+                                age++;
+                              });
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ]),
           ),
           //button
-          Container(
-            height: 60,
-            margin: EdgeInsets.only(left: 15, right: 15, bottom: 15, top: 10),
-            decoration: BoxDecoration(
-              color: Color(0xff64FFDA),
-              borderRadius: BorderRadius.circular(10),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ResultPage()),
+              );
+            },
+            child: Container(
+              child: Text(
+                "Calculate",
+                style: TextStyle(
+                  fontSize: 35,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              padding: EdgeInsets.only(left: 110, top: 8),
+              height: 60,
+              margin: EdgeInsets.only(left: 15, right: 15, bottom: 15, top: 10),
+              decoration: BoxDecoration(
+                color: Color(0xff64FFDA),
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
           )
         ],
@@ -172,11 +271,10 @@ class _InputPageState extends State<InputPage> {
   }
 }
 
-// no need to think har d on this class its just refactor done using flutter outline-> remove widget
+// no need to think hard on this class its just refactor done using flutter outline-> remove widget
 class card extends StatelessWidget {
   //after creating a const card, to make changes in it we make this constructor
   card({this.cardInput, this.colour});
-
   final Widget cardInput;
   final Color colour;
 
@@ -188,6 +286,26 @@ class card extends StatelessWidget {
       decoration: BoxDecoration(
         color: colour,
         borderRadius: BorderRadius.circular(15),
+      ),
+    );
+  }
+}
+
+class MyRoundButton extends StatelessWidget {
+  MyRoundButton({@required this.icon, @required this.press});
+  final IconData icon;
+  final Function press;
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      child: Icon(icon),
+      onPressed: press,
+      shape: CircleBorder(),
+      fillColor: Colors.blueGrey[700],
+      constraints: BoxConstraints.tightFor(
+        width: 56,
+        height: 56,
       ),
     );
   }
