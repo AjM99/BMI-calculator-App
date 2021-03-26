@@ -1,11 +1,12 @@
 // this is  where we take user input then we switch to next screen to show result,screen1
 import 'package:bmi_calculator/Constants.dart';
-import 'package:bmi_calculator/result.dart';
+import 'result.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'Constants.dart';
 import 'result.dart';
+import 'refactors.dart';
 
 // all constants are moved ro Constant.dart file
 enum Genders {
@@ -240,72 +241,16 @@ class _InputPageState extends State<InputPage> {
             ]),
           ),
           //button
-          GestureDetector(
-            onTap: () {
+          MyMainButton(
+            buttonName: "Calculate",
+            myTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ResultPage()),
               );
             },
-            child: Container(
-              child: Text(
-                "Calculate",
-                style: TextStyle(
-                  fontSize: 35,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              padding: EdgeInsets.only(left: 110, top: 8),
-              height: 60,
-              margin: EdgeInsets.only(left: 15, right: 15, bottom: 15, top: 10),
-              decoration: BoxDecoration(
-                color: Color(0xff64FFDA),
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
           )
         ],
-      ),
-    );
-  }
-}
-
-// no need to think hard on this class its just refactor done using flutter outline-> remove widget
-class card extends StatelessWidget {
-  //after creating a const card, to make changes in it we make this constructor
-  card({this.cardInput, this.colour});
-  final Widget cardInput;
-  final Color colour;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: cardInput,
-      margin: EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: colour,
-        borderRadius: BorderRadius.circular(15),
-      ),
-    );
-  }
-}
-
-class MyRoundButton extends StatelessWidget {
-  MyRoundButton({@required this.icon, @required this.press});
-  final IconData icon;
-  final Function press;
-
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      child: Icon(icon),
-      onPressed: press,
-      shape: CircleBorder(),
-      fillColor: Colors.blueGrey[700],
-      constraints: BoxConstraints.tightFor(
-        width: 56,
-        height: 56,
       ),
     );
   }

@@ -10,3 +10,8 @@ const kLabelStyle2 = TextStyle(
   fontWeight: FontWeight.w900,
   fontSize: 50,
 );
+const kButtonStyle = TextStyle(
+  fontSize: 35,
+  color: Colors.black,
+  fontWeight: FontWeight.bold,
+);
