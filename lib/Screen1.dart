@@ -1,12 +1,13 @@
 // this is  where we take user input then we switch to next screen to show result,screen1
 import 'package:bmi_calculator/Constants.dart';
-import 'result.dart';
+import 'resultScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'Constants.dart';
-import 'result.dart';
+import 'resultScreen.dart';
 import 'refactors.dart';
+import 'Logic.dart';
 
 // all constants are moved ro Constant.dart file
 enum Genders {
@@ -244,9 +245,15 @@ class _InputPageState extends State<InputPage> {
           MyMainButton(
             buttonName: "Calculate",
             myTap: () {
+              Calculation calc = Calculation(heightt: height, weightt: weight);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ResultPage()),
+                MaterialPageRoute(
+                    builder: (context) => ResultPage(
+                          fromulaResult: calc.formula(),
+                          resultComment2: calc.resultComment(),
+                          getInterpretation2: calc.getInterpretation(),
+                        )),
               );
             },
           )

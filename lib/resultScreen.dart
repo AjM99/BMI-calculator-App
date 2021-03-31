@@ -4,6 +4,15 @@ import 'Screen1.dart';
 import 'refactors.dart';
 
 class ResultPage extends StatelessWidget {
+  ResultPage(
+      {@required this.getInterpretation2,
+      @required this.fromulaResult,
+      @required this.resultComment2});
+
+  final String fromulaResult;
+  final String resultComment2;
+  final String getInterpretation2;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,21 +46,21 @@ class ResultPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Normal",
+                    resultComment2,
                     style: TextStyle(
-                      color: Colors.green,
+                      color: Colors.white,
                       fontSize: 30,
                     ),
                   ),
                   Text(
-                    "18.3",
+                    fromulaResult,
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 80,
                     ),
                   ),
                   Text(
-                    "your bmi is gg asdasf asf asfas fasf sfsaasd a  f",
+                    getInterpretation2,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20),
                   )
