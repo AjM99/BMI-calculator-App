@@ -75,7 +75,7 @@ class ResultPage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => InputPage()),
                 );
               },
-              buttonName: "Re-calculate")
+              buttonName: "Recalculate")
         ],
       ),
     );
